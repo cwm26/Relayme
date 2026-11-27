@@ -1,17 +1,922 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Get Started | RelayMe</title><meta name="description" content="Onboarding form.">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set up your outreach · RelayMe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* RelayMe brand kit */
+  :root {
+    color-scheme: light;
+    --navy: #0F1D38;        /* Primary */
+    --slate: #95A0A5;       /* Secondary */
+    --steel: #709DB8;       /* Tertiary */
+    --mist: #D6E0E8;        /* Color 4 */
+
+    --paper: #F2F5F8;
+    --surface: #FFFFFF;
+    --ink: var(--navy);
+    --muted: #55626B;       /* Secondary, darkened for readable text */
+    --rule: var(--mist);
+    --field-border: #C4CFD8;
+    --action: var(--navy);
+    --action-hover: #1D3159;
+    --chip: #E3EBF1;
+    --chip-ink: #2C5874;    /* Tertiary, darkened for readable text */
+    --focus: rgba(112, 157, 184, .45);
+    --error: #B42318;
+    --error-bg: #FDECEA;
+    --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --chat-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 16px/1.55 var(--font);
+  }
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    padding: 0 0 28px;
+    margin: 0 0 44px;
+  }
+  .logo { display: block; width: 236px; max-width: 70vw; height: auto; }
+  .logo-link { display: inline-block; border-radius: 4px; }
+  .logo-link:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(40px, 6vw, 60px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    margin: 0 0 16px;
+    max-width: 22em;
+    text-wrap: balance;
+  }
+  .h1-line { display: block; }  /* second half of the headline on its own line */
+  .intro {
+    font-size: 17px;
+    color: var(--muted);
+    margin: 0 0 52px;
+    max-width: 52ch;
+  }
+
+  /* Page grid: steps on the left; the preview only sits beside the messages */
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    column-gap: 56px;
+  }
+  .layout > .step { grid-column: 1; }
+  .layout > .callout-wrap { grid-column: 1 / -1; }
+  .step-about    { grid-row: 1; }
+  .callout-wrap  { grid-row: 2; margin: 0 0 48px; }
+  .step-icp      { grid-row: 3; }
+  .step-messages { grid-row: 4; }
+  .step-connect  { grid-row: 5; }
+  .preview-col   { grid-column: 2; grid-row: 4; }
+
+  /* Steps: a real sequence, so they are numbered */
+  .step { padding: 0 0 40px; margin: 0 0 40px; border-bottom: 1px solid var(--rule); }
+  .step-connect { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+  .step-about { border-bottom: 0; padding-bottom: 0; margin-bottom: 48px; } /* the band below separates it */
+  .step-head { display: flex; gap: 14px; align-items: baseline; margin: 0 0 6px; }
+  .step-num {
+    flex: none;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    display: inline-grid; place-items: center;
+    font-weight: 600; font-size: 13px;
+    transform: translateY(-3px);
+  }
+  h2 { font-family: var(--display); font-size: 30px; line-height: 1.1; font-weight: 600; margin: 0; }
+  .step-note { color: var(--muted); margin: 0 0 24px 44px; max-width: 56ch; }
+  .fields { margin-left: 44px; }
+
+  /* Preliminary notice before ICP + messages: full-width navy band */
+  .callout {
+    margin: 0;
+    padding: 30px 36px;
+    background: var(--navy);
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+    border-left: 6px solid var(--steel);
+  }
+
+  /* Skip option, attached under the band: for someone only lending their LinkedIn account */
+  .skip { padding: 22px 36px 24px; background: var(--surface); border: 1px solid var(--rule); border-top: 0;
+          border-left: 6px solid var(--steel); border-radius: 0 0 8px 8px; }
+  .skip-row { display: flex; gap: 24px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .skip-title { font-weight: 600; font-size: 17px; margin: 0 0 4px; }
+  .skip-body { color: var(--muted); margin: 0; max-width: 62ch; }
+  .skip-check { flex: none; display: flex; gap: 12px; align-items: center; cursor: pointer; margin: 0;
+                font-weight: 600; font-size: 15px; padding: 12px 16px;
+                border: 1px solid var(--steel); border-radius: 6px; background: var(--paper); }
+  .skip-check input { width: 20px; height: 20px; accent-color: var(--navy); margin: 0; flex: none; }
+  .skip-check:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .skip-done { display: none; margin: 18px 0 0; padding-top: 18px; border-top: 1px solid var(--rule); }
+  .skip-done p { margin: 0 0 14px; }
+  .skip-done .opt { font-weight: 400; color: var(--muted); }
+  .skip-done input { max-width: 360px; }
+  body.skipping .step-icp, body.skipping .step-messages, body.skipping .preview-col { display: none; }
+  body.skipping .step-connect { grid-row: 3; }
+  body.skipping .skip-check { background: var(--chip); }
+  body.skipping .skip-done { display: block; }
+  .callout-lead {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.15;
+    margin: 0 0 8px;
+    max-width: 46ch;
+    text-wrap: balance;
+  }
+  .callout-sub { margin: 0; color: var(--mist); font-size: 16px; }
+
+  .field { margin: 0 0 22px; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-weight: 600; font-size: 15px; margin: 0 0 4px; }
+  .hint { display: block; color: var(--muted); font-size: 14px; margin: 0 0 8px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .row + .row, .row + .field, .field + .row { margin-top: 0; }
+
+  input[type=text], input[type=email], textarea {
+    width: 100%;
+    font: inherit;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--field-border);
+    border-radius: 6px;
+    padding: 11px 13px;
+    transition: border-color .15s;
+  }
+  input::placeholder, textarea::placeholder { color: #8A959C; }
+  textarea { min-height: 128px; resize: vertical; line-height: 1.5; }
+  input:hover, textarea:hover { border-color: var(--slate); }
+  input:focus, textarea:focus { outline: none; border-color: var(--steel); box-shadow: 0 0 0 3px var(--focus); }
+  .invalid input, .invalid textarea { border-color: var(--error); }
+  .field-error { display: none; color: var(--error); font-size: 14px; margin-top: 6px; }
+  .invalid .field-error { display: block; }
+
+  /* ICP cards: one shows by default, up to five */
+  .icp-card { border: 1px solid var(--rule); background: var(--surface); border-radius: 8px; padding: 20px; margin: 0 0 16px; }
+  .icp-card .row:last-child .field { margin-bottom: 0; }
+  .icp-card[hidden] { display: none; }
+  .icp-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 14px; }
+  .icp-title { font: 600 16px/1.2 var(--font); margin: 0; }
+  .icp-remove { font: 500 14px/1 var(--font); color: var(--muted); background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; }
+  .icp-remove:hover { color: var(--error); }
+  .add-icp { font: 600 15px/1 var(--font); color: var(--chip-ink); background: var(--chip); border: 1px dashed var(--steel); border-radius: 8px; padding: 14px 18px; width: 100%; cursor: pointer; }
+  .add-icp:hover { background: var(--mist); }
+  .add-icp:focus-visible, .icp-remove:focus-visible { outline: 2px solid var(--steel); outline-offset: 2px; }
+  .add-icp[hidden] { display: none; }
+  .icp-limit { color: var(--muted); font-size: 14px; margin: 8px 0 0; }
+  .inserts { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+  .insert {
+    font: 500 14px/1 var(--font);
+    color: var(--chip-ink);
+    background: var(--chip);
+    border: 0;
+    border-radius: 999px;
+    padding: 8px 13px;
+    cursor: pointer;
+  }
+  .insert:hover { background: var(--mist); }
+  .insert:focus-visible { outline: 2px solid var(--steel); outline-offset: 2px; }
+  .insert span { font-weight: 700; margin-right: 4px; }
+
+  /* Preview: the one memorable element */
+  .preview { position: sticky; top: 24px; }
+  .preview-title { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.15; margin: 0 0 4px; }
+  .preview-sub { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+  .thread {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--steel);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .thread-head { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--navy); color: #fff;
+    display: grid; place-items: center;
+    font: 600 14px var(--chat-font);
+  }
+  .thread-name { font: 600 14px/1.2 var(--chat-font); }
+  .thread-meta { font: 400 12px/1.2 var(--chat-font); color: var(--muted); }
+  .bubble {
+    font: 400 15px/1.5 var(--chat-font);
+    background: var(--paper);
+    border-radius: 4px 14px 14px 14px;
+    padding: 12px 14px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    min-height: 48px;
+  }
+  .bubble .filled { background: var(--mist); color: var(--navy); border-radius: 3px; padding: 0 1px; }
+  .bubble .empty { color: var(--muted); font-style: italic; }
+  .preview-which { font-size: 13px; color: var(--muted); margin: 12px 2px 0; }
+  .preview.inline { position: static; margin: 14px 0 0; }
+  .preview.inline .preview-sub { display: none; }
+  .preview.inline .thread { padding: 14px; }
+
+  .connect-box { margin-left: 44px; }
+  .connect-box p { margin: 0 0 20px; max-width: 56ch; }
+  .form-error {
+    display: none;
+    background: var(--error-bg);
+    color: var(--error);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 0 0 16px;
+    font-size: 15px;
+  }
+  .form-error.show { display: block; }
+  .submit {
+    font: 600 16px/1 var(--font);
+    color: #fff;
+    background: var(--action);
+    border: 0;
+    border-radius: 6px;
+    padding: 17px 28px;
+    cursor: pointer;
+  }
+  .submit:hover { background: var(--action-hover); }
+  .submit:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .submit[disabled] { opacity: .65; cursor: progress; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .preview-col { display: none; }
+    .page { padding-top: 32px; }
+  }
+  @media (max-width: 560px) {
+    .page { padding: 28px 16px 72px; }
+    .h1-line { display: inline; }  /* let the headline flow on phones */
+    .row { grid-template-columns: 1fr; gap: 0; }
+    .row .field { margin-bottom: 22px; }
+    .step-note, .fields, .connect-box { margin-left: 0; }
+    .callout { padding: 22px 20px; border-left-width: 4px; }
+    .skip { padding: 20px; border-left-width: 4px; }
+    .skip-check { width: 100%; }
+    .submit { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
 <meta name="robots" content="noindex, nofollow, noarchive">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css"></head><body>
-<header class="site"><div class="wrap"><a class="brand" href="index.html"><span class="tile" aria-hidden="true">R</span>RelayMe</a>
-<nav class="main" aria-label="Main"><a href="how-it-works.html">How It Works</a><a href="platform.html">Platform</a><a href="services.html">Services</a><a href="account-safety.html">Account Safety</a><a href="pricing.html">Pricing</a><a href="about.html">About</a><a class="btn" href="book.html">Book a Call</a></nav></div></header>
-<main>
-<section class="hero" style="padding-bottom:24px"><div class="wrap"><p class="eyebrow">Get started</p><h1>Set up your LinkedIn outreach.</h1>
-<p class="lede">Answer a few questions, then connect your LinkedIn account on a secure page.</p>
-<div class="embed"><iframe src="https://colem.app.n8n.cloud/webhook/relayme-onboard" title="RelayMe onboarding form" style="width:100%;height:1500px;border:0" loading="lazy"></iframe></div>
-<p class="note">Form not loading? <a href="https://colem.app.n8n.cloud/webhook/relayme-onboard">Open it in its own tab</a>.</p></div></section></main>
-<footer class="site"><div class="wrap"><div>&copy; 2026 RelayMe</div><div><a href="how-it-works.html">How It Works</a><a href="platform.html">Platform</a><a href="services.html">Services</a><a href="account-safety.html">Account Safety</a><a href="pricing.html">Pricing</a><a href="book.html">Book a Call</a></div></div></footer>
-</body></html>
+<script>window.ONBOARD_SUBMIT_URL = "https://colem.app.n8n.cloud/webhook/relayme-onboard-submit";</script>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="logo-link" href="index.html" target="_top"><img class="logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMzYiIGhlaWdodD0iNTUiIHZpZXdCb3g9IjAgMCAyMzYgNTUiPjxyZWN0IHdpZHRoPSI1NSIgaGVpZ2h0PSI1NSIgcng9IjEyIiBmaWxsPSIjMEYxRDM4Ii8+PHRleHQgeD0iMjcuNSIgeT0iMzkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSIzNCIgZmlsbD0iI0ZGRkZGRiI+UjwvdGV4dD48dGV4dCB4PSI3MCIgeT0iMzciIGZvbnQtZmFtaWx5PSJBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSIyOCIgZmlsbD0iIzBGMUQzOCI+UmVsYXlNZTwvdGV4dD48L3N2Zz4=" alt="RelayMe website" width="236" height="55"></a>
+  </header>
+  <h1>Set Up Your LinkedIn Outreach Today, <span class="h1-line">We'll Handle the Rest</span></h1>
+  <p class="intro">Help us understand who you want to reach and what to say, then connect your LinkedIn account - Don't worry, nothing goes live until we confirm everything on our onboarding call.</p>
+
+  <form id="onboard" novalidate>
+    <div class="layout">
+
+      <section class="step step-about" aria-labelledby="s1">
+        <div class="step-head"><span class="step-num" aria-hidden="true">1</span><h2 id="s1">About you</h2></div>
+        <p class="step-note">We use this to set up your account and send your confirmation.</p>
+        <div class="fields">
+          <div class="row">
+            <div class="field" data-field="full_name">
+              <label for="full_name">Full name</label>
+              <input id="full_name" name="full_name" type="text" autocomplete="name" required>
+              <div class="field-error">Enter your full name.</div>
+            </div>
+            <div class="field" data-field="email">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+              <div class="field-error">Enter a valid email address.</div>
+            </div>
+          </div>
+          <div class="field" data-field="company">
+            <label for="company">Company name</label>
+            <input id="company" name="company" type="text" autocomplete="organization" required>
+            <div class="field-error">Enter your company name.</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="callout-wrap">
+        <div class="callout" role="note">
+          <p class="callout-lead">Your ICP and messages will be refined and repositioned on your onboarding call.</p>
+          <p class="callout-sub">The next two sections serve only as a starting point.</p>
+        </div>
+        <div class="skip">
+          <div class="skip-row">
+            <div>
+              <p class="skip-title">Just connecting your LinkedIn account?</p>
+              <p class="skip-body">If someone else on your team handles your targeting and messaging, skip the next two sections. We'll work through them with that person, so you won't need to book an onboarding call.</p>
+            </div>
+            <label class="skip-check"><input type="checkbox" id="skip_details"> Skip to connecting my LinkedIn</label>
+          </div>
+          <div class="skip-done">
+            <p>You're down to one step: connect your LinkedIn below.</p>
+            <label for="outreach_contact">Who handles your outreach? <span class="opt">(optional)</span></label>
+            <input type="text" id="outreach_contact" maxlength="200" placeholder="Name or email" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <section class="step step-icp" aria-labelledby="s2">
+        <div class="step-head"><span class="step-num" aria-hidden="true">2</span><h2 id="s2">Ideal customer profile</h2></div>
+        <p class="step-note">Who you want to reach. A rough description is fine. Have more than one type of customer? Add another ICP for each.</p>
+        <div class="fields">
+        <div class="icp-card" data-icp="1">
+          <div class="icp-head"><h3 class="icp-title">ICP</h3></div>
+          <div class="row">
+            <div class="field" data-field="icp_industry">
+              <label for="icp_industry">Industry</label>
+              <input id="icp_industry" name="icp_industry" type="text" required placeholder="e.g. Commercial roofing, HVAC">
+              <div class="field-error">Enter the industries you want to reach.</div>
+            </div>
+            <div class="field" data-field="icp_title">
+              <label for="icp_title">Job title / position</label>
+              <input id="icp_title" name="icp_title" type="text" required placeholder="e.g. Owner, CEO, COO">
+              <div class="field-error">Enter the job titles you want to reach.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp_company_size">
+              <label for="icp_company_size">Company size</label>
+              <input id="icp_company_size" name="icp_company_size" type="text" required placeholder="e.g. 10–50 employees">
+              <div class="field-error">Enter a company size.</div>
+            </div>
+            <div class="field" data-field="icp_location">
+              <label for="icp_location">Location</label>
+              <input id="icp_location" name="icp_location" type="text" required placeholder="e.g. Texas and Florida">
+              <div class="field-error">Enter a location.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp_revenue">
+              <label for="icp_revenue">Company revenue</label>
+              <input id="icp_revenue" name="icp_revenue" type="text" required placeholder="e.g. $1M–$10M per year">
+              <div class="field-error">Enter a revenue range.</div>
+            </div>
+          </div>
+        
+        </div>
+        <div class="icp-card" data-icp="2" hidden>
+          <div class="icp-head"><h3 class="icp-title">ICP 2</h3><button type="button" class="icp-remove" data-remove="2">Remove</button></div>
+          <div class="row">
+            <div class="field" data-field="icp2_industry">
+              <label for="icp2_industry">Industry</label>
+              <input id="icp2_industry" name="icp2_industry" type="text" placeholder="e.g. Commercial roofing, HVAC">
+              <div class="field-error">Enter the industries you want to reach.</div>
+            </div>
+            <div class="field" data-field="icp2_title">
+              <label for="icp2_title">Job title / position</label>
+              <input id="icp2_title" name="icp2_title" type="text" placeholder="e.g. Owner, CEO, COO">
+              <div class="field-error">Enter the job titles you want to reach.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp2_company_size">
+              <label for="icp2_company_size">Company size</label>
+              <input id="icp2_company_size" name="icp2_company_size" type="text" placeholder="e.g. 10–50 employees">
+              <div class="field-error">Enter a company size.</div>
+            </div>
+            <div class="field" data-field="icp2_location">
+              <label for="icp2_location">Location</label>
+              <input id="icp2_location" name="icp2_location" type="text" placeholder="e.g. Texas and Florida">
+              <div class="field-error">Enter a location.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp2_revenue">
+              <label for="icp2_revenue">Company revenue</label>
+              <input id="icp2_revenue" name="icp2_revenue" type="text" placeholder="e.g. $1M–$10M per year">
+              <div class="field-error">Enter a revenue range.</div>
+            </div>
+          </div>
+        </div>
+        <div class="icp-card" data-icp="3" hidden>
+          <div class="icp-head"><h3 class="icp-title">ICP 3</h3><button type="button" class="icp-remove" data-remove="3">Remove</button></div>
+          <div class="row">
+            <div class="field" data-field="icp3_industry">
+              <label for="icp3_industry">Industry</label>
+              <input id="icp3_industry" name="icp3_industry" type="text" placeholder="e.g. Commercial roofing, HVAC">
+              <div class="field-error">Enter the industries you want to reach.</div>
+            </div>
+            <div class="field" data-field="icp3_title">
+              <label for="icp3_title">Job title / position</label>
+              <input id="icp3_title" name="icp3_title" type="text" placeholder="e.g. Owner, CEO, COO">
+              <div class="field-error">Enter the job titles you want to reach.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp3_company_size">
+              <label for="icp3_company_size">Company size</label>
+              <input id="icp3_company_size" name="icp3_company_size" type="text" placeholder="e.g. 10–50 employees">
+              <div class="field-error">Enter a company size.</div>
+            </div>
+            <div class="field" data-field="icp3_location">
+              <label for="icp3_location">Location</label>
+              <input id="icp3_location" name="icp3_location" type="text" placeholder="e.g. Texas and Florida">
+              <div class="field-error">Enter a location.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp3_revenue">
+              <label for="icp3_revenue">Company revenue</label>
+              <input id="icp3_revenue" name="icp3_revenue" type="text" placeholder="e.g. $1M–$10M per year">
+              <div class="field-error">Enter a revenue range.</div>
+            </div>
+          </div>
+        </div>
+        <div class="icp-card" data-icp="4" hidden>
+          <div class="icp-head"><h3 class="icp-title">ICP 4</h3><button type="button" class="icp-remove" data-remove="4">Remove</button></div>
+          <div class="row">
+            <div class="field" data-field="icp4_industry">
+              <label for="icp4_industry">Industry</label>
+              <input id="icp4_industry" name="icp4_industry" type="text" placeholder="e.g. Commercial roofing, HVAC">
+              <div class="field-error">Enter the industries you want to reach.</div>
+            </div>
+            <div class="field" data-field="icp4_title">
+              <label for="icp4_title">Job title / position</label>
+              <input id="icp4_title" name="icp4_title" type="text" placeholder="e.g. Owner, CEO, COO">
+              <div class="field-error">Enter the job titles you want to reach.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp4_company_size">
+              <label for="icp4_company_size">Company size</label>
+              <input id="icp4_company_size" name="icp4_company_size" type="text" placeholder="e.g. 10–50 employees">
+              <div class="field-error">Enter a company size.</div>
+            </div>
+            <div class="field" data-field="icp4_location">
+              <label for="icp4_location">Location</label>
+              <input id="icp4_location" name="icp4_location" type="text" placeholder="e.g. Texas and Florida">
+              <div class="field-error">Enter a location.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp4_revenue">
+              <label for="icp4_revenue">Company revenue</label>
+              <input id="icp4_revenue" name="icp4_revenue" type="text" placeholder="e.g. $1M–$10M per year">
+              <div class="field-error">Enter a revenue range.</div>
+            </div>
+          </div>
+        </div>
+        <div class="icp-card" data-icp="5" hidden>
+          <div class="icp-head"><h3 class="icp-title">ICP 5</h3><button type="button" class="icp-remove" data-remove="5">Remove</button></div>
+          <div class="row">
+            <div class="field" data-field="icp5_industry">
+              <label for="icp5_industry">Industry</label>
+              <input id="icp5_industry" name="icp5_industry" type="text" placeholder="e.g. Commercial roofing, HVAC">
+              <div class="field-error">Enter the industries you want to reach.</div>
+            </div>
+            <div class="field" data-field="icp5_title">
+              <label for="icp5_title">Job title / position</label>
+              <input id="icp5_title" name="icp5_title" type="text" placeholder="e.g. Owner, CEO, COO">
+              <div class="field-error">Enter the job titles you want to reach.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp5_company_size">
+              <label for="icp5_company_size">Company size</label>
+              <input id="icp5_company_size" name="icp5_company_size" type="text" placeholder="e.g. 10–50 employees">
+              <div class="field-error">Enter a company size.</div>
+            </div>
+            <div class="field" data-field="icp5_location">
+              <label for="icp5_location">Location</label>
+              <input id="icp5_location" name="icp5_location" type="text" placeholder="e.g. Texas and Florida">
+              <div class="field-error">Enter a location.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field" data-field="icp5_revenue">
+              <label for="icp5_revenue">Company revenue</label>
+              <input id="icp5_revenue" name="icp5_revenue" type="text" placeholder="e.g. $1M–$10M per year">
+              <div class="field-error">Enter a revenue range.</div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="add-icp" id="add-icp">+ Add another ICP</button>
+        <p class="icp-limit" id="icp-limit">Add up to 5 ideal customer profiles, one at a time.</p>
+      </div>
+      </section>
+
+      <section class="step step-messages" aria-labelledby="s3">
+        <div class="step-head"><span class="step-num" aria-hidden="true">3</span><h2 id="s3">Your messages</h2></div>
+        <p class="step-note">Use the buttons to drop in each prospect's first name or company. They're filled in automatically for every person you reach.</p>
+        <div class="fields">
+
+          <div class="field msg" data-field="message_1">
+            <label for="message_1">First message</label>
+            <span class="hint">Keep it short and personal, and end with a question.</span>
+            <div class="inserts" role="group" aria-label="Insert into first message">
+              <button type="button" class="insert" data-token="[First Name]"><span>+</span>First name</button>
+              <button type="button" class="insert" data-token="[Company]"><span>+</span>Company</button>
+            </div>
+            <textarea id="message_1" name="message_1" required placeholder="Hey [First Name],&#10;&#10;"></textarea>
+            <div class="field-error">Write your first message.</div>
+          </div>
+
+          <div class="field msg" data-field="message_2">
+            <label for="message_2">Second message</label>
+            <span class="hint">An alternate first message, so we can see which gets more replies.</span>
+            <div class="inserts" role="group" aria-label="Insert into second message">
+              <button type="button" class="insert" data-token="[First Name]"><span>+</span>First name</button>
+              <button type="button" class="insert" data-token="[Company]"><span>+</span>Company</button>
+            </div>
+            <textarea id="message_2" name="message_2" required></textarea>
+            <div class="field-error">Write your second message.</div>
+          </div>
+
+          <div class="field msg" data-field="follow_up_1">
+            <label for="follow_up_1">Follow-up</label>
+            <span class="hint">Provide more info or present your offer.</span>
+            <div class="inserts" role="group" aria-label="Insert into follow-up">
+              <button type="button" class="insert" data-token="[First Name]"><span>+</span>First name</button>
+              <button type="button" class="insert" data-token="[Company]"><span>+</span>Company</button>
+            </div>
+            <textarea id="follow_up_1" name="follow_up_1" required></textarea>
+            <div class="field-error">Write your follow-up.</div>
+          </div>
+
+          <div class="field msg" data-field="follow_up_2">
+            <label for="follow_up_2">Final follow-up</label>
+            <span class="hint">A good place for your calendar link.</span>
+            <div class="inserts" role="group" aria-label="Insert into final follow-up">
+              <button type="button" class="insert" data-token="[First Name]"><span>+</span>First name</button>
+              <button type="button" class="insert" data-token="[Company]"><span>+</span>Company</button>
+            </div>
+            <textarea id="follow_up_2" name="follow_up_2" required></textarea>
+            <div class="field-error">Write your final follow-up.</div>
+          </div>
+
+        </div>
+      </section>
+
+      <aside class="preview-col" aria-label="Message preview">
+        <div class="preview">
+          <p class="preview-title">How your message reads</p>
+          <p class="preview-sub">Shown with a sample prospect, Jordan at Brightline Roofing.</p>
+          <div class="thread">
+            <div class="thread-head">
+              <div class="avatar" id="pv-avatar" aria-hidden="true">Y</div>
+              <div>
+                <div class="thread-name" id="pv-name">You</div>
+                <div class="thread-meta">to Jordan Ellis</div>
+              </div>
+            </div>
+            <div class="bubble" id="pv-bubble" aria-live="polite"></div>
+          </div>
+          <p class="preview-which" id="pv-which">Previewing: First message</p>
+        </div>
+      </aside>
+
+      <section class="step step-connect" aria-labelledby="s4">
+        <div class="step-head"><span class="step-num" aria-hidden="true">4</span><h2 id="s4">Connect LinkedIn</h2></div>
+        <div class="connect-box">
+          <p>Next you'll sign in to LinkedIn on a secure page and approve the connection on your phone or by email. Once that's done, your outreach is set up automatically.</p>
+          <div class="form-error" id="form-error" role="alert"></div>
+          <button type="submit" class="submit" id="submit">Continue to LinkedIn</button>
+        </div>
+      </section>
+
+    </div>
+  </form>
+</main>
+
+<script>
+(function () {
+  var SAMPLE = { 'first name': 'Jordan', 'last name': 'Ellis', 'company': 'Brightline Roofing',
+                 'position': 'Owner', 'location': 'Denver, CO', 'industry': 'Construction' };
+  var KNOWN = Object.keys(SAMPLE);
+  var LABELS = { message_1: 'First message', message_2: 'Second message',
+                 follow_up_1: 'Follow-up', follow_up_2: 'Final follow-up' };
+  var FIELDS = ['full_name', 'email', 'company',
+                'icp_industry', 'icp_title', 'icp_company_size', 'icp_location', 'icp_revenue',
+                'message_1', 'message_2', 'follow_up_1', 'follow_up_2'];
+
+  var ICP_KEYS = ['industry', 'title', 'company_size', 'location', 'revenue'];
+  var MAX_ICPS = 5;
+  var EXTRA_ICP_FIELDS = [];
+  for (var n = 2; n <= MAX_ICPS; n++) ICP_KEYS.forEach(function (k) { EXTRA_ICP_FIELDS.push('icp' + n + '_' + k); });
+  var form = document.getElementById('onboard');
+  var bubble = document.getElementById('pv-bubble');
+  var which = document.getElementById('pv-which');
+  var nameEl = document.getElementById('pv-name');
+  var avatar = document.getElementById('pv-avatar');
+  var errorBox = document.getElementById('form-error');
+  var submitBtn = document.getElementById('submit');
+  // Where answers go (n8n's full address is filled in when the page is made, so
+  // a copy of this page shown on another site still reaches n8n)
+  var SUBMIT_URL = window.ONBOARD_SUBMIT_URL || 'relayme-onboard-submit';
+  // Shown inside another page (your website) rather than on its own?
+  var embedded = true;
+  try { embedded = window.self !== window.top; } catch (e) {}
+  // A locked-down frame has no origin of its own ("null")
+  var lockedOrigin = false;
+  try { lockedOrigin = String(window.origin) === 'null'; } catch (e) { lockedOrigin = true; }
+  var preview = document.querySelector('.preview');
+  var home = document.querySelector('.preview-col');
+  var narrow = window.matchMedia('(max-width: 900px)');
+  var current = 'message_1';
+
+  // Wide screens: preview sits beside the messages. Narrow: under the message being edited.
+  function placePreview() {
+    if (narrow.matches) {
+      document.getElementById(current).closest('.field').appendChild(preview);
+      preview.classList.add('inline');
+    } else if (preview.parentNode !== home) {
+      home.appendChild(preview);
+      preview.classList.remove('inline');
+    }
+  }
+  if (narrow.addEventListener) narrow.addEventListener('change', placePreview);
+
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function render() {
+    var text = document.getElementById(current).value;
+    which.textContent = 'Previewing: ' + LABELS[current];
+    if (!text.trim()) {
+      bubble.innerHTML = '<span class="empty">Start typing to see your message here.</span>';
+      return;
+    }
+    bubble.innerHTML = esc(text).replace(/\[([^\]\n]+)\]/g, function (m, inner) {
+      var key = inner.trim().toLowerCase();
+      return SAMPLE[key] ? '<span class="filled">' + SAMPLE[key] + '</span>' : m;
+    });
+  }
+
+  function renderSender() {
+    var n = document.getElementById('full_name').value.trim();
+    nameEl.textContent = n || 'You';
+    avatar.textContent = n ? n.charAt(0).toUpperCase() : 'Y';
+  }
+
+  function autosize(ta) {
+    ta.style.height = 'auto';
+    ta.style.height = Math.max(128, ta.scrollHeight + 2) + 'px';
+  }
+
+  function setError(field, msg) {
+    field.classList.add('invalid');
+    if (msg) field.querySelector('.field-error').textContent = msg;
+  }
+  function clearError(field) { if (field) field.classList.remove('invalid'); }
+
+  // Insert buttons put the token at the cursor of their own field
+  document.querySelectorAll('.insert').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var ta = btn.closest('.field').querySelector('textarea');
+      var token = btn.getAttribute('data-token');
+      var start = ta.selectionStart, end = ta.selectionEnd, v = ta.value;
+      var before = v.slice(0, start);
+      var pad = before && !/\s$/.test(before) ? ' ' : '';
+      ta.value = before + pad + token + v.slice(end);
+      var pos = start + pad.length + token.length;
+      ta.focus();
+      ta.setSelectionRange(pos, pos);
+      current = ta.id;
+      placePreview();
+      clearError(ta.closest('.field'));
+      autosize(ta);
+      render();
+      saveDraft();
+    });
+  });
+
+  document.querySelectorAll('textarea').forEach(function (ta) {
+    ta.addEventListener('focus', function () { current = ta.id; placePreview(); render(); });
+    ta.addEventListener('input', function () { autosize(ta); render(); clearError(ta.closest('.field')); });
+  });
+  document.querySelectorAll('input').forEach(function (inp) {
+    inp.addEventListener('input', function () { clearError(inp.closest('.field')); });
+  });
+  document.getElementById('full_name').addEventListener('input', renderSender);
+
+  // ICP cards: the first always shows; "Add another ICP" opens the next, up to 5
+  var addIcp = document.getElementById('add-icp');
+  var icpLimit = document.getElementById('icp-limit');
+  function cardOf(n) { return form.querySelector('.icp-card[data-icp="' + n + '"]'); }
+  function visibleCards() { return Array.prototype.filter.call(form.querySelectorAll('.icp-card'), function (c) { return !c.hidden; }); }
+  function refreshIcps() {
+    var shown = visibleCards().length;
+    addIcp.hidden = shown >= MAX_ICPS;
+    icpLimit.textContent = shown >= MAX_ICPS ? 'That\u2019s the limit of 5 ICPs.' : 'Add up to 5 ideal customer profiles, one at a time.';
+  }
+  addIcp.addEventListener('click', function () {
+    for (var n = 2; n <= MAX_ICPS; n++) {
+      var c = cardOf(n);
+      if (c.hidden) { c.hidden = false; c.querySelector('input').focus(); break; }
+    }
+    refreshIcps(); saveDraft();
+  });
+  // Removing a card shifts the ones after it up, so there are never gaps
+  form.querySelectorAll('.icp-remove').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var from = Number(btn.getAttribute('data-remove'));
+      var shown = visibleCards().length;
+      for (var n = from; n < shown; n++) ICP_KEYS.forEach(function (k) {
+        document.getElementById('icp' + n + '_' + k).value = document.getElementById('icp' + (n + 1) + '_' + k).value;
+      });
+      var last = cardOf(shown);
+      last.querySelectorAll('input').forEach(function (i) { i.value = ''; });
+      last.querySelectorAll('.field').forEach(clearError);
+      last.hidden = true;
+      refreshIcps(); saveDraft();
+      addIcp.focus();
+    });
+  });
+  function collectIcps() {
+    var out = [];
+    visibleCards().forEach(function (c) {
+      var n = Number(c.getAttribute('data-icp'));
+      var o = {};
+      ICP_KEYS.forEach(function (k) { o[k] = document.getElementById(n === 1 ? 'icp_' + k : 'icp' + n + '_' + k).value.trim(); });
+      out.push(o);
+    });
+    return out;
+  }
+
+  // Keep a draft on this device so a failed LinkedIn sign-in doesn't lose anything.
+  // The success page clears it.
+  var DRAFT_KEY = 'onboard-draft-v2';
+  try { localStorage.removeItem('onboard-draft'); } catch (e) {}
+  function saveDraft() {
+    try {
+      var d = {};
+      FIELDS.concat(EXTRA_ICP_FIELDS).forEach(function (k) { d[k] = document.getElementById(k).value; });
+      d._icps = visibleCards().length;
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    } catch (e) {}
+  }
+  try {
+    var saved = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+    if (saved) FIELDS.concat(EXTRA_ICP_FIELDS).forEach(function (k) {
+      if (typeof saved[k] === 'string' && saved[k]) document.getElementById(k).value = saved[k];
+    });
+    if (saved && saved._icps > 1) for (var c = 2; c <= Math.min(saved._icps, MAX_ICPS); c++) cardOf(c).hidden = false;
+  } catch (e) {}
+  refreshIcps();
+  form.addEventListener('input', saveDraft);
+  document.querySelectorAll('textarea').forEach(autosize);
+
+  function unknownTokens(text) {
+    var out = [], m, re = /\[([^\]\n]+)\]/g;
+    while ((m = re.exec(text)) !== null) {
+      if (KNOWN.indexOf(m[1].trim().toLowerCase()) === -1) out.push(m[0]);
+    }
+    return out;
+  }
+
+  form.querySelectorAll('.field-error').forEach(function (e) { e.setAttribute('data-default', e.textContent); });
+
+  // "Just connecting your LinkedIn account?": hides the profile and message
+  // sections and makes Connect LinkedIn step 2. Unticking brings them back as they were.
+  var skipBox = document.getElementById('skip_details');
+  var connectNum = document.querySelector('.step-connect .step-num');
+  var connectText = document.querySelector('.connect-box p');
+  var connectOrig = connectText.textContent;
+  function applySkip() {
+    var on = skipBox.checked;
+    document.body.classList.toggle('skipping', on);
+    connectNum.textContent = on ? '2' : '4';
+    connectText.textContent = on
+      ? "Sign in to LinkedIn on a secure page and approve the connection on your phone or by email. That's all we need from you."
+      : connectOrig;
+    if (on) form.querySelectorAll('.step-icp .field, .step-messages .field').forEach(clearError);
+  }
+  skipBox.addEventListener('change', applySkip);
+  applySkip();
+
+  function validate() {
+    var firstBad = null;
+    form.querySelectorAll('.field').forEach(function (f) {
+      if (skipBox.checked && f.closest('.step-icp, .step-messages')) return;
+      if (f.closest('[hidden]')) return;
+      var el = f.querySelector('input, textarea');
+      var v = el.value.trim();
+      var msg = null;
+      if (!v) msg = f.querySelector('.field-error').getAttribute('data-default');
+      else if (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) msg = 'Enter a valid email address.';
+      else if (el.tagName === 'TEXTAREA') {
+        var bad = unknownTokens(v);
+        if (bad.length) msg = 'Replace ' + bad[0] + ' with your own words, or use the buttons to insert a first name or company.';
+      }
+      if (msg) { setError(f, msg); if (!firstBad) firstBad = el; }
+    });
+    if (firstBad) firstBad.focus();
+    return !firstBad;
+  }
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    errorBox.classList.remove('show');
+    if (!validate()) return;
+
+    var payload = {};
+    FIELDS.forEach(function (k) { payload[k] = document.getElementById(k).value; });
+    payload.icps = skipBox.checked ? '[]' : JSON.stringify(collectIcps());
+    payload.skip_details = skipBox.checked;
+    try { payload.plan = new URLSearchParams(location.search).get("plan") || ""; } catch (e) {}
+    payload.outreach_contact = skipBox.checked ? document.getElementById('outreach_contact').value : '';
+    saveDraft();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Preparing your LinkedIn connection…';
+
+    // A locked-down page (no origin of its own: inside your website's frame, or
+    // served on its own with a security lock) can't read n8n's reply. Send the
+    // answers as a normal page visit instead: n8n saves them and moves the
+    // whole tab on to LinkedIn.
+    if (lockedOrigin) return sendAsPage(payload);
+
+    fetch(SUBMIT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (b) { return { ok: r.ok, body: b }; }); })
+      .then(function (res) {
+        if (res.ok && res.body && res.body.url) {
+          // Inside your website's page, open LinkedIn in the whole tab, not the frame
+          var target = window;
+          try { if (embedded && window.top) target = window.top; } catch (e) {}
+          target.location.href = res.body.url;
+          return;
+        }
+        var e = new Error((res.body && res.body.error) || 'Something went wrong on our side. Please try again in a minute.');
+        e.answered = true;   // n8n replied (with a problem), so don't send again
+        throw e;
+      })
+      .catch(function (err) {
+        if (err && err.answered) return showSubmitError(err.message);
+        // No answer at all (the browser blocked the request, or a network hiccup):
+        // try the page-visit route, which browsers don't block
+        sendAsPage(payload);
+      });
+  });
+
+  function showSubmitError(msg) {
+    errorBox.textContent = msg;
+    errorBox.classList.add('show');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Continue to LinkedIn';
+  }
+
+  // Posts the answers in the whole tab (target _top). n8n replies with a page
+  // that forwards to LinkedIn, or explains what to fix with a link back here.
+  function sendAsPage(payload) {
+    var f = document.createElement('form');
+    f.method = 'POST';
+    f.action = SUBMIT_URL;
+    f.target = embedded ? '_top' : '_self';
+    f.acceptCharset = 'utf-8';
+    f.style.display = 'none';
+    var fields = {};
+    Object.keys(payload).forEach(function (k) { fields[k] = String(payload[k]); });
+    fields._nav = '1';
+    var back = '';
+    try { back = document.referrer || ''; } catch (e) {}
+    fields._back = back;
+    Object.keys(fields).forEach(function (k) {
+      var i = document.createElement('textarea');
+      i.name = k;
+      i.value = fields[k];
+      f.appendChild(i);
+    });
+    document.body.appendChild(f);
+    f.submit();
+    // Still here after a while: the site blocked the move to the next page
+    setTimeout(function () {
+      showSubmitError('Your browser blocked the next step. Open this form in its own tab and try again, or reply to our email and we’ll send you a direct link.');
+    }, 15000);
+  }
+
+  placePreview();
+  render();
+  renderSender();
+})();
+</script>
+</body>
+</html>
