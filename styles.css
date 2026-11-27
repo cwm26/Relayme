@@ -27,6 +27,7 @@ section.band .lede{color:var(--mist)}section.band .btn{background:#fff;color:var
 .steps strong{display:block;font-size:18px;margin-bottom:2px}.steps span{color:var(--muted)}
 .price{font-size:44px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px}.price small{font-size:17px;font-weight:500;color:var(--muted);letter-spacing:0}
 .card.plan{display:flex;flex-direction:column;gap:6px}.card.plan .btn{margin-top:18px;text-align:center}
+.feat{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px;color:var(--ink);flex:1}.feat li{padding-left:26px;position:relative;font-size:16px}.feat li:before{content:'';position:absolute;left:4px;top:.45em;width:7px;height:12px;border:solid var(--steel);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) scale(.8)}
 .note{font-size:14px;color:var(--muted);margin-top:22px}.prose{max-width:46em}.prose p{color:var(--muted)}.prose h2{margin-top:40px}
 footer.site{background:#fff;border-top:1px solid var(--rule);padding:36px 0;margin-top:0;font-size:14px;color:var(--muted)}
 footer.site .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}footer.site a{text-decoration:none;margin-right:18px}
