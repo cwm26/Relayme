@@ -1,0 +1,14 @@
+server {
+    listen ${PORT};
+    server_name _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Hidden site: keep it out of search engines (pages also carry a noindex tag).
+    add_header X-Robots-Tag "noindex, nofollow, noarchive" always;
+
+    # /pricing -> /pricing.html
+    location / {
+        try_files $uri $uri.html $uri/ =404;
+    }
+}

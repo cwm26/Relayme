@@ -7,3 +7,9 @@ Static HTML/CSS site. No build step, deploys on any static host (Cloudflare Page
 - `book.html` embeds the RelayMe Calendly page. `booked.html` is the post-booking thank-you page (set as the Calendly redirect).
 - Copy is a draft: no performance claims, no client names. Plan contents are not listed on the pricing page yet.
 - Do not put secrets or credentials in this repo.
+
+## Deploying on Railway
+
+New service -> GitHub Repo -> this repo. Leave Root Directory empty; Railway builds the
+`Dockerfile` (nginx serving the files as they are). Then Settings -> Networking -> add a
+domain. No variables are needed.
